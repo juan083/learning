@@ -103,6 +103,7 @@ else:
 内置的函数 dir() 可以找到模块内定义的所有名称
 
 #### 17. 异常处理语句
+else 子句将在 try 子句没有发生任何异常的时候执行
 ```
 try...except...else...finnally...
 ```
@@ -115,3 +116,44 @@ try...except...else...finnally...
 pip3 install xxx
 pip3 list
 ```
+
+#### 20. 文件读写
+
+file(name, mode, buffering)
+- name: 文件名
+- mode: r只读，w可写，a末尾写，b写二进制文件，+可读写
+- buffering: 设置文件读写缓存，0不设置，1设置
+
+使用with...as...打开，避免文件不存在，无法打开等问题
+
+```
+f = open('a.txt', 'r')
+text = f.read()
+```
+
+#### 21. 函数参数
+- 固定参数
+- 可选参数
+- 可变参数：
+*arg，实际是一个tuple
+
+**argv，实际是一个dict
+
+##### *arg与**argv的区别：
+- 使用**argv表示时，可变参数就会放到一个字典中，并且在输入参数时，必须说明参数的名字
+- 使用*agr，在输入参数时，不能使用参数的名称
+
+```
+def function_name(param1, param2 = xxx, *arg, **argv)
+```
+
+#### 22. lambda函数
+匿名函数、函数式编程
+
+python同时提供了两种编程方式和支持，命令式编程则清晰易懂，对于熟悉函数式编程的人来说，不但简洁，而且可读性更好
+
+#### 23. 函数的作用域
+LGB原则：
+- L：局部命名空间
+- G：全局命名空间
+- B：内在命名空间

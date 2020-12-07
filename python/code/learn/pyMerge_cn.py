@@ -18,13 +18,13 @@ class docHelper(object):
 
     # 读取文件内容
     def readDoc(self):
-        fileA = open('./a.txt', 'r')
+        fileA = open('./a_cn.txt', 'r')
         txtA = fileA.read()
         self.lineA = txtA.splitlines()
         for txt in self.lineA:
             self.wordsA.extend([v.strip() for v in txt.split(' ')])
 
-        fileB = open('./b.txt', 'r')
+        fileB = open('./b_cn.txt', 'r')
         txtB = fileB.read()
         self.lineB = txtB.splitlines()
         for txt in self.lineB:
