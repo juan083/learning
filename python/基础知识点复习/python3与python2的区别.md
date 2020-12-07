@@ -11,6 +11,9 @@ python3与python2的区别
 7. 不支持has_key方法
 8. input接收客户端输入str
 9. 打开文件
+10. 数据类型
+11. 模块改名
+12. dict的keys
 
 #### 1. print函数
 Python3中print为一个函数，必须用括号括起来；Python2是语句
@@ -52,3 +55,25 @@ Python2的input的到的为int型，Python2的raw_input得到的为str类型
 #### 9. 打开文件
 原： file( ..... ) 或 open(.....)
 改为：只能用 open(.....)
+
+#### 10. 数据类型
+- 去掉long，只保留int，但范围与python2的long一样
+- 在python3有了Unicode（UTF-8）字符串，以及一个字节类：byte、bytearrays
+
+#### 11. 模块改名
+删减了几个不常用或重复的功能，并将几个模块改名，如：将urllib2、urlparse、robotparse并入urllib模块
+
+#### 12. dict的keys
+- python2 返回list
+- python3 返回迭代对象，需使用list()转化为列表
+
+### python3.7 新增功能(2018.6.27发布)
+1. 强制utf-8运行时模式
+2. 具有纳秒分辨率的新时间函数
+```
+time.clock_gettime_ns()
+time.clock_settime_ns()
+time.time_ns()
+```
+3. 内置breakpoint()
+breakpoint()可以使函数被调用时让执行中断然后切换到调试器
