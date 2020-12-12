@@ -24,13 +24,17 @@ class mojiSpiderCity:
 
     _provinceDic = {}  # 省份字典（辅助字段）
 
+    _updateTime = 0
+
     def __init__(self):
         self._client = pymongo.MongoClient(self._host)[self._db][self._col]
+        self._updateTime = time.time()
         if self._isFlush:
             self._client.remove({})
 
     # 将数据写入DB
     def _updateDb(self, id, params):
+        params['update_time'] = self._updateTime
         self._client.update_one({"_id": id}, {"$set": params}, upsert=True)
 
     # 爬取：省份
