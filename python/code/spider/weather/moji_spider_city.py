@@ -34,7 +34,7 @@ class mojiSpiderCity:
 
     # 将数据写入DB
     def _updateDb(self, id, params):
-        params['update_time'] = self._updateTime
+        params['update_time'] = int(self._updateTime)
         self._client.update_one({"_id": id}, {"$set": params}, upsert=True)
 
     # 爬取：省份

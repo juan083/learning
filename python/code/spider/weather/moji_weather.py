@@ -21,9 +21,9 @@ class mojiSpiderCity:
 
     _client = ''  # 连接
 
-    _isFlush = False  # 是否情况原有的城市数据
+    #_isFlush = False  # 是否情况原有的城市数据
 
-    #_isFlush = True  # 是否情况原有的城市数据
+    _isFlush = True  # 是否情况原有的城市数据
 
     _mojiHost = 'https://tianqi.moji.com'  # 墨迹天气的域名
 
@@ -36,9 +36,9 @@ class mojiSpiderCity:
         self._updateTime = time.time()
         if self._isFlush:
             today = time.strftime("%Y%m%d", time.localtime())
-            self._client[self._col].remove({'day': today})
+            self._client[self._col].delete_many({'day': today})
             month = time.strftime("%m", time.localtime())
-            self._client[self._colCal].remove({'month': month})
+            self._client[self._colCal].delete_many({'month': month})
 
     # 将数据写入DB
     def _updateDb(self, id, params, col='weather'):
@@ -88,7 +88,6 @@ class mojiSpiderCity:
                 li = day.find_all('li')
                 preDic = {}
                 k = ['today', 'tomorrow', 'after_tomorrow'][i]
-                preDic['city'] = cityInfo['_id']
                 preDic['day'] = li[0].a.text.strip()  # 今天，明天，后天
                 preDic['wea'] = li[1].text.strip()  # 天气
                 preDic['temp'] = li[2].text.strip()  # 温度
@@ -106,12 +105,13 @@ class mojiSpiderCity:
             for cal in calSoup:
                 if cal.em and cal.img and cal.find_all('p'):
                     weaCal = {}
-                    id = cityInfo['_id'] + '_' + time.strftime("%Y%m", time.localtime())
+                    weaCal['city'] = cityInfo['_id']
                     weaCal['month'] = time.strftime("%m", time.localtime())
                     weaCal['day'] = cal.em.text.strip()
                     weaCal['weather'] = cal.img.attrs['alt'].strip()
-                    weaCal['temp'] = cal.find_all('p')[0].text
-                    weaCal['wind'] = cal.find_all('p')[0].text
+                    weaCal['temp'] = cal.find_all('p')[0].text.strip()
+                    weaCal['wind'] = cal.find_all('p')[0].text.strip()
+                    id = cityInfo['_id'] + '_' + time.strftime("%Y%m", time.localtime()) + weaCal['day']
                     # print(weaCal)
                     self._updateDb(id, weaCal, 'weather_calendar')
             break
