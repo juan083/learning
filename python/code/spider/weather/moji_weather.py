@@ -1,6 +1,10 @@
 #!/usr/bin/python3
 # -*- coding:UTF-8 -*-
 
+'''
+墨迹天气，获取天气的详细信息
+抓取页面：https://tianqi.moji.com/weather/china/guangdong/nanshan-district
+'''
 
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
@@ -61,10 +65,15 @@ class mojiSpiderCity:
             soup = BeautifulSoup(urlopen(cityInfo['url']), 'html.parser')  # parser 解析
             # 位置
             weaInfo['location'] = soup.find('div', class_='search_default').em.text.strip()
-            # print(cityInfo, weaInfo)
-            # exit()
-            # 质量
-            weaInfo['quality'] = soup.find('span', class_='level level_3').img.attrs['alt'].strip()
+            weaAlert = soup.find('div', class_='wea_alert').find_all('li')
+            # 空气质量
+            weaInfo['quality'] = weaAlert[0].em.text.strip()
+            # 风力预警
+            if len(weaAlert) >= 2:
+                weaInfo['wind_alert'] = weaAlert[1].em.text.strip()
+            else:
+                weaInfo['wind_alert'] = ''
+            print(weaInfo)
             # 当前温度
             weaDiv = soup.find('div', class_='wea_weather')
             weaInfo['temp'] = weaDiv.em.text.strip()
@@ -114,7 +123,7 @@ class mojiSpiderCity:
                     id = cityInfo['_id'] + '_' + time.strftime("%Y%m", time.localtime()) + weaCal['day']
                     # print(weaCal)
                     self._updateDb(id, weaCal, 'weather_calendar')
-            break
+            #break
 
 if __name__ == '__main__':
     spider = mojiSpiderCity()
