@@ -5,7 +5,7 @@
 墨迹天气，获取天气的详细信息
 抓取页面：https://tianqi.moji.com/weather/china/guangdong/nanshan-district
 '''
-
+import random
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import pymongo
@@ -56,7 +56,9 @@ class mojiSpiderCity:
     def spiderWeather(self):
         cityAll = self._client[self._colCity].find({'parent': {'$ne': 'china'}})
         today = time.strftime("%Y%m%d", time.localtime())
+        c = 0
         for cityInfo in cityAll:
+            print('start ......')
             id = cityInfo['_id'] + '_' + today
             weaInfo = {
                 'day': today,
@@ -73,7 +75,7 @@ class mojiSpiderCity:
                 weaInfo['wind_alert'] = weaAlert[1].em.text.strip()
             else:
                 weaInfo['wind_alert'] = ''
-            print(weaInfo)
+            #print(weaInfo)
             # 当前温度
             weaDiv = soup.find('div', class_='wea_weather')
             weaInfo['temp'] = weaDiv.em.text.strip()
@@ -123,6 +125,11 @@ class mojiSpiderCity:
                     id = cityInfo['_id'] + '_' + time.strftime("%Y%m", time.localtime()) + weaCal['day']
                     # print(weaCal)
                     self._updateDb(id, weaCal, 'weather_calendar')
+            c += 1
+            #s = random.randint(1, 3)
+            s = 1
+            time.sleep(s)
+            print(cityInfo['name'], c, 'sleep=' + str(s))
             #break
 
 if __name__ == '__main__':
